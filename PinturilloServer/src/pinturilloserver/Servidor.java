@@ -9,6 +9,7 @@ package pinturilloserver;
  *
  * @author julian
  */
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -47,6 +48,14 @@ public class Servidor extends Conexion{ //Se hereda de conexión para hacer uso 
             {
                 //Se muestra por pantalla el mensaje recibido
                 System.out.println(mensajeServidor);
+                String msg = mensajeServidor;
+                int clr = msg.charAt(-1);
+                ProcesColor clac = new ProcesColor(clr);
+                System.out.println(clac.getColor());
+            
+            
+            
+            
             }
 
             System.out.println("Fin de la conexión");
@@ -56,7 +65,9 @@ public class Servidor extends Conexion{ //Se hereda de conexión para hacer uso 
         catch (Exception e)
         {
             String msg = e.getMessage();
-            System.out.println(msg);
+            int clr = msg.charAt(-1);
+            ProcesColor clac = new ProcesColor(clr);
+            System.out.println(clac.getColor());
             
         }
     }

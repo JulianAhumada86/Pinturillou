@@ -59,7 +59,7 @@ public class SimplePaint04 {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
-                cliente = new ServerPuente("192.168.60.178", "3000", paintPane);
+                cliente = new ServerPuente("192.168.60.178", "1234", paintPane);
                 cliente.conectar();
             }
         });
