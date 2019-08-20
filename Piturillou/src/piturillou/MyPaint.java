@@ -11,8 +11,11 @@ import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
 
-public class MyPaint {
-
+public class MyPaint{
+    
+        
+    
+    
     public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Just Paint");

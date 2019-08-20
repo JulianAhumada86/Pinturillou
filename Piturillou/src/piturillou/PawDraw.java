@@ -21,7 +21,7 @@ import javax.swing.JComponent;
  *
  * @author julian
  */
-class PadDraw extends JComponent {
+class PadDraw extends JComponent implements Runnable {
 
     private Image image;
     private Graphics2D graphics2D;
@@ -111,6 +111,15 @@ class PadDraw extends JComponent {
 
     public void big() {
         graphics2D.setStroke(new BasicStroke(12));;
+    }
+
+    @Override
+    public void run() {
+        
+        
+        
+        
+        
     }
 
 }

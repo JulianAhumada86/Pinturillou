@@ -41,6 +41,8 @@ public class Cliente extends Conexion{
     
     public void enviarMensaje(String msg){
         try {
+            salidaServidor = new DataOutputStream(cs.getOutputStream());
+            System.out.println("enviar "+msg);
             salidaServidor.writeUTF(msg);
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);

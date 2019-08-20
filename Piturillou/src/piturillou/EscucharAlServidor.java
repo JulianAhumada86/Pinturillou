@@ -29,6 +29,7 @@ public class EscucharAlServidor extends Thread {
     public void run(){
         while(true){
             System.out.println("run");
+            System.out.println("ghola");
             try {
                 System.out.println(EntradaServidor.readUTF());
             } catch (IOException ex) {

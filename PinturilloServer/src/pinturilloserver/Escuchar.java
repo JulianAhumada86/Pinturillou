@@ -42,8 +42,9 @@ public class Escuchar extends Thread {
                     inp = new BufferedReader(new InputStreamReader(socketEntrada));
                    
                     
-                    mensajeCliente =null;
-                    if((mensajeCliente =inp.readLine()) == null){
+                    mensajeCliente = null;
+                    mensajeCliente = inp.readLine();
+                    if(mensajeCliente == null){//El mensaje esta aca, en el readLine(). No se por que no andaxd
                         System.out.println("nada");
                         continue;
                     } else {
