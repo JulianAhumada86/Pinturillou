@@ -13,26 +13,47 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Servidor extends Conexion{ //Se hereda de conexión para hacer uso de los sockets y demás
-   
-    
-    public Servidor() throws IOException{super("servidor");} //Se usa el constructor para servidor de Conexion
+public class Servidor extends ConexionServer implements Runnable { //Se hereda de conexión para hacer uso de los sockets y demás
+    private ArrayList<Socket> clientes;
+    private int numConexiones=0; 
+    private int MAX_CONEXIONES;
+    public Servidor(){
+        this.clientes = new ArrayList();
+    } //Se usa el constructor para servidor de Conexion
 
+       @Override
+    public void run() {
+        Socket sc = null;
+            while(true){
+            try {
+                //Espero a que un cliente se conecte
+                sc = ss.accept();
+                System.out.println("Cliente conectado");
+                clientes.add(sc);
+                this.enviarMensaje("hay " +clientes.size() + " clientes conectados");
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            Escuchar t1 = new Escuchar(clientes);
+            t1.start();
+            t1.getMensaje();
+            }
+    }
     
-    
-    
-    
-    public void startServer()//Método para iniciar el servidor
-    {
-        while (true){
-        try
-        {
-            System.out.println("Esperando..."); //Esperando conexión
-
-            cs = ss.accept(); //Accept comienza el socket y espera una conexión desde un cliente
-
+    public void startServer(){//Método para iniciar el servidor
+        try{
             System.out.println("Cliente en línea");
 
             //Se obtiene el flujo de salida del cliente para enviarle mensajes
@@ -49,27 +70,79 @@ public class Servidor extends Conexion{ //Se hereda de conexión para hacer uso 
                 //Se muestra por pantalla el mensaje recibido
                 System.out.println(mensajeServidor);
                 String msg = mensajeServidor;
-                int clr = msg.charAt(-1);
-                ProcesColor clac = new ProcesColor(clr);
-                System.out.println(clac.getColor());
-            
-            
-            
-            
             }
 
             System.out.println("Fin de la conexión");
-            //Se finaliza la conexión con el cliente
-            continue;
         }
-        catch (Exception e)
-        {
-            String msg = e.getMessage();
-            int clr = msg.charAt(-1);
-            ProcesColor clac = new ProcesColor(clr);
-            System.out.println(clac.getColor());
+        catch (Exception e){
+            System.out.println("hola");
+            System.out.println(e);
             
         }
     }
+    
+    public void enviarMensaje(String h){
+        for (Socket sock : clientes) {
+            try {
+                System.out.println("enviando "+h);
+                DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
+                dos.writeUTF(h);
+            } catch (IOException ex) {
+                conexionCerrada(sock);
+                System.out.println("error");
+                Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+        
+    
 }
+public void procesarConexion(Socket socketCliente) {
+        synchronized (this) {
+            //si se llego al máximo de conexiones, bloquear el
+            //hilo de recepción hasta que haya un lugar.
+
+            while (numConexiones == MAX_CONEXIONES) {
+                try {
+                    wait();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            numConexiones++;
+        }
+        Cliente con = new Cliente(socketCliente);
+        Thread t = new Thread(con);
+        t.start();
+        clientes.add(socketCliente);
+    }
+
+    public synchronized void conexionCerrada(Socket conexion) {
+        clientes.remove(clientes.indexOf(conexion));
+        
+        notify();
+    }
+    
+    public void enviarMesajeClientes(String cliente, String mensaje){
+        Enumeration cons = conexiones.elements();
+        
+        while(cons.hasMoreElements()){
+            Cliente c = (Cliente) cons.nextElement();
+            c.enviarMensaje(mensaje);
+        }
+        System.out.println(" ### " + cliente + " : " + mensaje);
+    }
+    
+    /**
+     * Clase interna que provee el código para manejar un cliente 
+     * que se ejecutará en un hilo independiente.
+     */
+ 
+
 }
+
+
+
+
+
+
+    

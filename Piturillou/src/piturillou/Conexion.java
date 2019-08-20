@@ -1,25 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package prueba;
+package piturillou;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Vector;
-
-/**
- *
- * @author julian
- */
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author julian
+ */
 public class Conexion{
     private final int PUERTO = 1234; //Puerto para la conexión
     private final String HOST = "localhost"; //Host para la conexión
@@ -39,10 +35,3 @@ public class Conexion{
         }
     }
 }
-    
-    
-    
-    
-    
-    
-

@@ -3,18 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prueba;
+package piturillou;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author julian
  */
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 public class Cliente extends Conexion{
-    public Cliente() throws IOException{super("cliente");} //Se usa el constructor para cliente de Conexion
+    public Cliente() throws IOException{super("cliente");
+            DataInputStream EntradaServidor = new DataInputStream(cs.getInputStream());
+            salidaServidor = new DataOutputStream(cs.getOutputStream());
+            EscucharAlServidor t1 = new EscucharAlServidor(EntradaServidor);
+            t1.start();
+
+    } //Se usa el constructor para cliente de Conexion
 
     public void startClient() throws IOException{
             DataInputStream EntradaServidor = new DataInputStream(cs.getInputStream());
@@ -22,15 +30,20 @@ public class Cliente extends Conexion{
             salidaServidor.writeUTF("Qui onda");
             //Flujo de datos hacia el servidor
             while (true){
-
-            //Se enviarán dos mensajes
             for (int i = 0; i < 2; i++){
                 //Se escribe en el servidor usando su flujo de datos
-                salidaServidor.writeUTF("Qui onda");
                 salidaServidor.writeUTF("Este es el mensaje número " + (i+1) + "\n");
             }
             System.out.println(EntradaServidor.readUTF());
             }
     
+    }
+    
+    public void enviarMensaje(String msg){
+        try {
+            salidaServidor.writeUTF(msg);
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

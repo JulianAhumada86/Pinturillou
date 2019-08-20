@@ -22,7 +22,7 @@ public class ChatServer implements Runnable {
 
     public final static int MAX_CONEXIONES = 40;
 
-    public int puerto = 3000;
+    public int puerto = 1234;
     private int numConexiones = 0;
     private Vector conexiones = null;
 
