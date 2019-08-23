@@ -28,14 +28,15 @@ class PadDraw extends JComponent implements Runnable {
     private int currentX, currentY, oldX, oldY;
     public Cliente cliente;
     public PadDraw() throws IOException {
-        cliente = new Cliente();
+        cliente = new Cliente(this);
         setDoubleBuffered(false);
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 oldX = e.getX();
                 oldY = e.getY();
-                String msg = ""+currentX + "/"+currentY;
-                cliente.enviarMensaje(msg);
+                //String msg = ""+currentX + "/"+currentY;
+                //cliente.enviarMensaje(msg);
+
             }
         });
 
@@ -44,10 +45,8 @@ class PadDraw extends JComponent implements Runnable {
                 currentX = e.getX();
                 currentY = e.getY();
                 if (graphics2D != null) {
-                    graphics2D.drawLine(oldX, oldY, currentX, currentY);
-                    String msg = ""+currentX + "/"+currentY;
-                    System.out.println(msg);
-                    cliente.enviarMensaje(msg);
+                    DibujarLinea(oldX, oldY, currentX, currentY);
+                    cliente.enviarMensaje("p/"+oldX +"/"+oldY+"/"+currentX+"/"+currentY);
                 }
                 repaint();
                 oldX = currentX;
@@ -112,14 +111,26 @@ class PadDraw extends JComponent implements Runnable {
     public void big() {
         graphics2D.setStroke(new BasicStroke(12));;
     }
-
+    
     @Override
     public void run() {
-        
-        
-        
-        
-        
+        String Index="decv";
+        if(cliente.getDib()){
+            String an = cliente.getMensaje();
+            if(an.charAt(0)==Index.charAt(0)){//Indicaria que tiene que dibujar 
+                for(int i=0; i<an.length();i++){}
+            }
+        }
     }
-
+        
+    public void DibujarLinea(int currentX,int currentY,int oldX, int oldY){
+        if (graphics2D != null) {
+             graphics2D.drawLine(oldX, oldY, currentX, currentY);
+        }
+        repaint();
+    }
+    public void enviarMensaje(String mensaje){
+    cliente.enviarMensaje(mensaje);
+    }
 }
+

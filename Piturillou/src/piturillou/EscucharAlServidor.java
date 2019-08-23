@@ -18,25 +18,71 @@ import java.util.logging.Logger;
  */
 public class EscucharAlServidor extends Thread {
     private DataInputStream EntradaServidor;
-
-    
-    
-    public EscucharAlServidor(DataInputStream EntradaServidor) {
+    private String mensaje;
+    private PadDraw padDraw;
+    public EscucharAlServidor(DataInputStream EntradaServidor,PadDraw padDraw) {
         this.EntradaServidor = EntradaServidor;
+        this.padDraw = padDraw;
     }
     
     @Override
     public void run(){
         while(true){
-            System.out.println("run");
-            System.out.println("ghola");
+            //System.out.println("run");
+            //System.out.println("ghola");
             try {
-                System.out.println(EntradaServidor.readUTF());
+                mensaje = EntradaServidor.readUTF();
+                String[] arrayMensaje = mensaje.split("/");
+                if (arrayMensaje[0].equals("p")){
+                    padDraw.DibujarLinea(Integer.parseInt(arrayMensaje[1]),//oldX
+                            Integer.parseInt(arrayMensaje[2]),//oldY
+                            Integer.parseInt(arrayMensaje[3]),//x
+                            Integer.parseInt(arrayMensaje[4]));//y
+                }else if(arrayMensaje[0].equals("c")){
+                    if(arrayMensaje[1].equals("r")){
+                        padDraw.red();
+                    }else if(arrayMensaje[1].equals("y")){
+                        padDraw.yellow();
+                    }else if(arrayMensaje[1].equals("b")){
+                        padDraw.black();
+                    }else if(arrayMensaje[1].equals("bl")){
+                        padDraw.blue();
+                    }else if(arrayMensaje[1].equals("g")){
+                        padDraw.green();
+                        mensaje=null;
+                    }
+                }else if(arrayMensaje[0].equals("clear")){
+                    padDraw.clear();
+                }else if(arrayMensaje[0].equals("t")){
+                    if(arrayMensaje[1].equals("s")){
+                        padDraw.small();
+                    }else if(arrayMensaje[1].equals("m")){
+                        padDraw.medium();
+                    }else if(arrayMensaje[1].equals("b")){
+                        padDraw.big();
+                    }
+                }
             } catch (IOException ex) {
+                System.out.println(ex);
             }
-            
         }
     
+    }
+
+    public DataInputStream getEntradaServidor() {
+        return EntradaServidor;
+    }
+
+    public void setEntradaServidor(DataInputStream EntradaServidor) {
+        this.EntradaServidor = EntradaServidor;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
     }
     
 }

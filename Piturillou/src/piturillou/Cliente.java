@@ -16,36 +16,51 @@ import java.util.logging.Logger;
  * @author julian
  */
 public class Cliente extends Conexion{
-    public Cliente() throws IOException{super("cliente");
+    private EscucharAlServidor t1;
+    private boolean dib;
+    private String mensaje;
+    private PadDraw p;
+    public Cliente(PadDraw p) throws IOException{super("cliente");
+            this.p = p;
             DataInputStream EntradaServidor = new DataInputStream(cs.getInputStream());
             salidaServidor = new DataOutputStream(cs.getOutputStream());
-            EscucharAlServidor t1 = new EscucharAlServidor(EntradaServidor);
+            t1 = new EscucharAlServidor(new DataInputStream(cs.getInputStream()),p);
             t1.start();
-
+            
     } //Se usa el constructor para cliente de Conexion
 
-    public void startClient() throws IOException{
-            DataInputStream EntradaServidor = new DataInputStream(cs.getInputStream());
-            salidaServidor = new DataOutputStream(cs.getOutputStream());
-            salidaServidor.writeUTF("Qui onda");
-            //Flujo de datos hacia el servidor
-            while (true){
-            for (int i = 0; i < 2; i++){
-                //Se escribe en el servidor usando su flujo de datos
-                salidaServidor.writeUTF("Este es el mensaje número " + (i+1) + "\n");
-            }
-            System.out.println(EntradaServidor.readUTF());
-            }
-    
-    }
     
     public void enviarMensaje(String msg){
         try {
             salidaServidor = new DataOutputStream(cs.getOutputStream());
-            System.out.println("enviar "+msg);
             salidaServidor.writeUTF(msg);
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public EscucharAlServidor getT1() {
+        return t1;
+    }
+
+    public void setT1(EscucharAlServidor t1) {
+        this.t1 = t1;
+    }
+
+    public boolean getDib() {
+        return dib;
+    }
+
+    public void setDib(boolean dib) {
+        this.dib = dib;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+    
 }

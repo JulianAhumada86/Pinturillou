@@ -12,7 +12,7 @@ import java.io.IOException;
 import javax.swing.*;
 
 public class MyPaint{
-    
+        
         
     
     
@@ -25,6 +25,7 @@ public class MyPaint{
         content.setLayout(new BorderLayout());
 
         final PadDraw drawPad = new PadDraw();
+        
 
         content.add(drawPad, BorderLayout.CENTER);
 
@@ -39,6 +40,7 @@ public class MyPaint{
 
             public void actionPerformed(ActionEvent e) {
                 drawPad.clear();
+                drawPad.enviarMensaje("clear");
             }
         });
 
@@ -48,6 +50,7 @@ public class MyPaint{
         yellowButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.yellow();
+                drawPad.enviarMensaje("c/y");
             }
 
         });
@@ -58,6 +61,7 @@ public class MyPaint{
         greenButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.green();
+                drawPad.enviarMensaje("c/g");
             }
         });
 
@@ -67,6 +71,7 @@ public class MyPaint{
         redButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.red();
+                drawPad.enviarMensaje("c/r");
             }
         });
 
@@ -76,14 +81,16 @@ public class MyPaint{
         blueButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.blue();
+                drawPad.enviarMensaje("c/bl");
             }
         });
-
+        
         JButton blackButton = new JButton("BLACK");
 
         blackButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.black();
+                drawPad.enviarMensaje("c/b");
             }
         });
         greenButton.setPreferredSize(new Dimension(80, 20));
@@ -117,16 +124,20 @@ public class MyPaint{
         rdbtnPx.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.small();
+                drawPad.enviarMensaje("t/s");
             }
         });
         rdbtnPx_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.medium();
+                drawPad.enviarMensaje("t/m");
             }
         });
         rdbtnPx_2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.big();
+                drawPad.enviarMensaje("t/b");
+
             }
         });
 
@@ -137,6 +148,7 @@ public class MyPaint{
         clearButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 drawPad.clear();
+                drawPad.enviarMensaje("clear");
             }
         });
         panel.add(clearButton);

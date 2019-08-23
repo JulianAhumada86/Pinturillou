@@ -18,8 +18,7 @@ public class PinturilloServer {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        Servidor c = new Servidor();
-        //c.startServer();
+        Servidor c = new Servidor();//l
         c.run();
     }
     
