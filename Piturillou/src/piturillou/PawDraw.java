@@ -26,7 +26,8 @@ class PadDraw extends JComponent implements Runnable {
     private Image image;
     private Graphics2D graphics2D;
     private int currentX, currentY, oldX, oldY;
-    public Cliente cliente;
+    private Cliente cliente;
+    private boolean Dibujante=false;
     public PadDraw() throws IOException {
         cliente = new Cliente(this);
         setDoubleBuffered(false);
@@ -45,8 +46,10 @@ class PadDraw extends JComponent implements Runnable {
                 currentX = e.getX();
                 currentY = e.getY();
                 if (graphics2D != null) {
-                    DibujarLinea(oldX, oldY, currentX, currentY);
-                    cliente.enviarMensaje("p/"+oldX +"/"+oldY+"/"+currentX+"/"+currentY);
+                    if(Dibujante){
+                        DibujarLinea(oldX, oldY, currentX, currentY);
+                        cliente.enviarMensaje("p/"+oldX +"/"+oldY+"/"+currentX+"/"+currentY);
+                    }
                 }
                 repaint();
                 oldX = currentX;
@@ -130,7 +133,79 @@ class PadDraw extends JComponent implements Runnable {
         repaint();
     }
     public void enviarMensaje(String mensaje){
-    cliente.enviarMensaje(mensaje);
+        cliente.enviarMensaje(mensaje);
     }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public Graphics2D getGraphics2D() {
+        return graphics2D;
+    }
+
+    public void setGraphics2D(Graphics2D graphics2D) {
+        this.graphics2D = graphics2D;
+    }
+
+    public int getCurrentX() {
+        return currentX;
+    }
+
+    public void setCurrentX(int currentX) {
+        this.currentX = currentX;
+    }
+
+    public int getCurrentY() {
+        return currentY;
+    }
+
+    public void setCurrentY(int currentY) {
+        this.currentY = currentY;
+    }
+
+    public int getOldX() {
+        return oldX;
+    }
+
+    public void setOldX(int oldX) {
+        this.oldX = oldX;
+    }
+
+    public int getOldY() {
+        return oldY;
+    }
+
+    public void setOldY(int oldY) {
+        this.oldY = oldY;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public boolean isDibujante() {
+        return Dibujante;
+    }
+
+    public void setDibujante(boolean Dibujante) {
+        this.Dibujante = Dibujante;
+        if(Dibujante){
+            System.out.println("dibujar");
+        }else{
+            System.out.println("no dibujar");
+        }
+    }
+
+
+
 }
 

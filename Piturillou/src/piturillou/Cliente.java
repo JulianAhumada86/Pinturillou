@@ -20,6 +20,8 @@ public class Cliente extends Conexion{
     private boolean dib;
     private String mensaje;
     private PadDraw p;
+    private boolean dibujate = false;
+    
     public Cliente(PadDraw p) throws IOException{super("cliente");
             this.p = p;
             DataInputStream EntradaServidor = new DataInputStream(cs.getInputStream());

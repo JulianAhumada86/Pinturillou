@@ -32,6 +32,7 @@ public class EscucharAlServidor extends Thread {
             //System.out.println("ghola");
             try {
                 mensaje = EntradaServidor.readUTF();
+                System.out.println(mensaje);
                 String[] arrayMensaje = mensaje.split("/");
                 if (arrayMensaje[0].equals("p")){
                     padDraw.DibujarLinea(Integer.parseInt(arrayMensaje[1]),//oldX
@@ -61,7 +62,16 @@ public class EscucharAlServidor extends Thread {
                     }else if(arrayMensaje[1].equals("b")){
                         padDraw.big();
                     }
+                }else if(arrayMensaje[0].equals("d")){
+                    if(arrayMensaje[1].equals("t")){
+                        padDraw.setDibujante(true);
+                    }else{
+                        padDraw.setDibujante(false);
+                    }
+                }else if(arrayMensaje[0].equals("m")){
+                    System.out.println("Servidor: "+arrayMensaje[1]);
                 }
+                    
             } catch (IOException ex) {
                 System.out.println(ex);
             }
