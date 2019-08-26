@@ -57,8 +57,6 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
                     if(yaDibujo.size()==0){
                         yaDibujo.add(sc);
                         dibujante(0);
-                    }else{
-                        dibujante();
                     }
                     
                     
@@ -106,8 +104,23 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
                         dos.writeUTF("m/Es tu turno de dibujar");
                     }else{
                         dos.writeUTF("d/f");//dibujante False
-                        dos.writeUTF("m/Adivia");
+                        dos.writeUTF("m/Adivina");
                     }
+                }
+            } catch (IOException ex) {
+                    System.out.println("error");
+                    clientes.set(clientes.indexOf(sock),null); //Si el usuario esta desconectado su Socket se vuelve null
+                    System.out.println("Se desconecto el cliente "+sock.getInetAddress());//NO puedo eliminar el elemento por que me da error 
+            }
+        }
+    }
+    public void enviarMensaje(){
+            for (Socket sock : clientes) {
+            try {
+                if(sock!=null){
+                DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
+                        dos.writeUTF("d/null");//dibujante False
+                        dos.writeUTF("m/FIN DEL JUEGO");
                 }
             } catch (IOException ex) {
                     System.out.println("error");
@@ -128,6 +141,7 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
             Socket sock = clientes.get(n);
             if(yaDibujo.contains(sock)){
                 if(clientes.get(clientes.size()-1) == sock){//Si el ultimo cliente es igual al sock empieza de 0
+                    System.out.println("ultimo");
                     n=0;
                 }else{
                     n++;
@@ -141,7 +155,7 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
         if(yaDibujo.size()==clientes.size()){
             System.out.println("JUEGO TERMINADO_________________");
             enviarMensaje("JuegoTerminado");
-        
+            enviarMensaje();
         }
     }
     public void dibujante(int i){
@@ -242,38 +256,7 @@ class Cliente implements Runnable {
                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-                
-                /*
-                try {
-                System.out.println("intentoleer");
-                mensajeCliente = flujoEntrada.readLine();
-                System.out.println("leo");
-                String h = flujoEntrada.readLine();
-                System.out.println("mensaje" + h);
-                } catch (IOException ex) {
-                System.out.println("no hay nada");
-                }
-                
-                } catch (IOException ex) {
-                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-                }finally {
-                try {
-                if (flujoEntrada != null) {
-                flujoEntrada.close();
-                }
-                if (flujoSalida != null) {
-                flujoSalida.close();
-                }
-                socketCliente.close();
-                } catch (Exception e) {
-                e.printStackTrace();
-                }
-                }
-                }
-                }
-            */    
-            
-    
+
     
 public void enviarMensaje(String mensaje) {
         try {
@@ -354,8 +337,7 @@ class EscucharAlCliente extends Thread {
                         s.enviarMensaje(mensaje);
                         System.out.println(mensaje);
                         if(mensaje.equals("clear")){
-                            System.out.println("nuevoDIBUJANTEEEE");
-                         s.dibujante();
+                            s.dibujante();
                         }
                     }
             } catch (IOException ex) {

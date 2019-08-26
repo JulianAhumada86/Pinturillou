@@ -204,6 +204,9 @@ class PadDraw extends JComponent implements Runnable {
             System.out.println("no dibujar");
         }
     }
+    public void finJuego(){
+        this.Dibujante=false;
+    }
 
 
 

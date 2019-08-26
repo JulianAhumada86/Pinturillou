@@ -65,8 +65,10 @@ public class EscucharAlServidor extends Thread {
                 }else if(arrayMensaje[0].equals("d")){
                     if(arrayMensaje[1].equals("t")){
                         padDraw.setDibujante(true);
-                    }else{
+                    }else if(arrayMensaje[1].equals("f")){
                         padDraw.setDibujante(false);
+                    }else{
+                        padDraw.finJuego();
                     }
                 }else if(arrayMensaje[0].equals("m")){
                     System.out.println("Servidor: "+arrayMensaje[1]);
