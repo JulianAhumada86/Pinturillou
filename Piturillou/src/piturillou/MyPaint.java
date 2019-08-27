@@ -18,7 +18,7 @@ public class MyPaint{
     
     public static void main(String[] args) throws IOException {
 
-        JFrame frame = new JFrame("Just Paint");
+        JFrame frame = new JFrame("Pinturillou");
 
         Container content = frame.getContentPane();
 
@@ -152,12 +152,67 @@ public class MyPaint{
             }
         });
         panel.add(clearButton);
+        
+        
+        //Zona para el chat
 
-        frame.setSize(454, 440);
+
+        
+        JPanel panel_2 = new JPanel();//Panel para el chat
+        panel_2.setPreferredSize(new Dimension(200, 0));
+        panel_2.setMinimumSize(new Dimension(200, 0));
+        panel_2.setMaximumSize(new Dimension(200, 0));
+        panel_2.setBackground(Color.white);
+        panel_2.setLayout(null);
+
+        
+        JPanel panel_3 = new JPanel();
+        panel_3.setBounds(2, 2, 195, 610);
+        panel_3.setBackground(Color.white);
+        panel_2.add(panel_3);
+        
+        
+        JTextArea txt_A = new JTextArea(40,17);
+        txt_A.setForeground(Color.blue);
+        txt_A.setBackground(Color.white);
+        txt_A.setEditable(true);
+        txt_A.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+        
+
+        JTextField txt = new JTextField();
+        txt.setFont(txt.getFont().deriveFont(25f));
+        txt.setBounds(2, 610, 199, 30);
+        txt.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+        txt.setBackground(Color.white);
+        txt.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            System.out.println("some action");
+            txt_A.append(System.getProperty("line.separator"));
+            drawPad.enviarMensaje("j/"+txt.getText());
+            txt_A.append(txt.getText());
+            txt.setText("");
+                
+            
+            }
+        });
+            
+        
+
+        
+        
+        panel_2.add(txt);
+        panel_3.add(txt_A);
+        panel_3.add(new JScrollPane(txt_A));
+            
+        
+        content.add(panel_2, BorderLayout.EAST);
+        frame.setSize(1910, 1070);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setVisible(true);
+        
 
     }
 }

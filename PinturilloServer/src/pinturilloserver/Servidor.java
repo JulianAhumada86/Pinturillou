@@ -135,7 +135,7 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
         System.out.println("Se desconecto el cliente "+conexion.getInetAddress());
     }
 
-    public void dibujante(){
+    public void Juego(){
         int n = (int) (Math.random() *clientes.size());        
         while(yaDibujo.size() < clientes.size()){//Cuando todos hayan dibujado termina el bucle
             Socket sock = clientes.get(n);
@@ -332,14 +332,15 @@ class EscucharAlCliente extends Thread {
             }
             try {
                 String mensaje=EntradaCliente.readUTF();
-                System.out.println(yaDibujo.size());
+                
                     if(sock==yaDibujo.get(yaDibujo.size()-1)){
                         s.enviarMensaje(mensaje);
                         System.out.println(mensaje);
-                        if(mensaje.equals("clear")){
-                            s.dibujante();
-                        }
+                    }else{
+                        s.enviarMensaje(mensaje);
                     }
+                    
+                    
             } catch (IOException ex) {
             }
             

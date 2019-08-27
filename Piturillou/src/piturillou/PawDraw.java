@@ -27,7 +27,8 @@ class PadDraw extends JComponent implements Runnable {
     private Graphics2D graphics2D;
     private int currentX, currentY, oldX, oldY;
     private Cliente cliente;
-    private boolean Dibujante=false;
+    private boolean Dibujante=true;
+    private boolean real;
     public PadDraw() throws IOException {
         cliente = new Cliente(this);
         setDoubleBuffered(false);
@@ -206,6 +207,14 @@ class PadDraw extends JComponent implements Runnable {
     }
     public void finJuego(){
         this.Dibujante=false;
+    }
+
+    public boolean isReal() {
+        return real;
+    }
+
+    public void setReal(boolean real) {
+        this.real = real;
     }
 
 
