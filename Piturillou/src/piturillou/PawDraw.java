@@ -29,7 +29,11 @@ class PadDraw extends JComponent implements Runnable {
     private Cliente cliente;
     private boolean Dibujante=true;
     private boolean real;
-    public PadDraw() throws IOException {
+    private String msg;
+    private chat ch;
+    
+    public PadDraw(chat ch) throws IOException {
+        this.ch = ch;
         cliente = new Cliente(this);
         setDoubleBuffered(false);
         addMouseListener(new MouseAdapter() {
@@ -215,6 +219,16 @@ class PadDraw extends JComponent implements Runnable {
 
     public void setReal(boolean real) {
         this.real = real;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+        System.out.println(" ACAAAAAA");ch.setMsg(msg);
+
     }
 
 

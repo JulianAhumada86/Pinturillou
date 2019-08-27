@@ -337,6 +337,7 @@ class EscucharAlCliente extends Thread {
                         s.enviarMensaje(mensaje);
                         System.out.println(mensaje);
                     }else{
+                        System.out.println("Adivinador"+ mensaje);
                         s.enviarMensaje(mensaje);
                     }
                     

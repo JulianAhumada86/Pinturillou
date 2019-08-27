@@ -73,8 +73,7 @@ public class EscucharAlServidor extends Thread {
                 }else if(arrayMensaje[0].equals("m")){
                     System.out.println("Servidor: "+arrayMensaje[1]);
                 }else if(arrayMensaje[0].equals("j")){
-                    System.out.println(arrayMensaje[1]);
-                    
+                    padDraw.setMsg(arrayMensaje[1]);
                 }
                 
                 
