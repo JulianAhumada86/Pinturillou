@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 public class ConexionServer{
     private final int PUERTO = 1234; //Puerto para la conexión
-    private final String HOST = "127.0.0.1"; //Host para la conexión
     protected String mensajeServidor; //Mensajes entrantes (recibidos) en el servidor
     protected ServerSocket ss; //Socket del servidor
     protected Socket cs; //Socket del cliente
@@ -32,7 +31,7 @@ public class ConexionServer{
     public ConexionServer(){
         try {
             ss = new ServerSocket(PUERTO);//Se crea el socket para el servidor en puerto 1234
-        } catch (IOException ex) {
+        }catch (IOException ex) {
             Logger.getLogger(ConexionServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    

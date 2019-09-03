@@ -30,55 +30,48 @@ import jdk.net.Sockets;
 public class Servidor extends ConexionServer implements Runnable { //Se hereda de conexión para hacer uso de los sockets y demás
     protected ArrayList<Socket> clientes;
     protected ArrayList<Cliente> conexiones=new ArrayList<Cliente>();
-    private ArrayList<Socket> yaDibujo;
     private int numConexiones=0; 
     private int MAX_CONEXIONES;
     private Socket desconecxion;
-    
+    private Juego juego;
     public Servidor(){
         this.clientes = new ArrayList();
-        yaDibujo=new ArrayList<Socket>();
+        this.juego = new Juego(clientes,this);
     } //Se usa el constructor para servidor de Conexion
 
        @Override
     public void run() {
         Socket sc;
         Cliente c;
-            while(true){
-                try {
-                    //Espero a que un cliente se conecte
-                    System.out.println("Esperando conexion");
-                    sc = ss.accept();
-                    numConexiones++;
-                    System.out.println("Cliente conectado");
-                    clientes.add(sc);//Añado el socket a la lista de sockets
-                    c = new Cliente(sc);//Creo un Cliente a partir de Socket
-                    conexiones.add(c);//Añado el cliente a una lista de clientes
-                    if(yaDibujo.size()==0){
-                        yaDibujo.add(sc);
-                        dibujante(0);
-                    }
-                    
-                    
-                    Thread t2 = new Thread(c);
-                    t2.start();
-                    EscucharAlCliente t3 = new EscucharAlCliente(sc,this);
-                    t3.start();
-                    t3.setS(this);
-                    enviarMensaje("Hay "+ clientes.size()+"conectados");
-                    
-      ////////////////////////////////////////////////////////              
-                } catch (IOException ex) {
-                    System.out.println(ex);
-                    System.out.println("aca");
+        
+        while(true){
+            try {
+                //Espero a que un cliente se conecte
+                System.out.println("Esperando conexion");
+                sc = ss.accept();
+                numConexiones++;
+                System.out.println("Cliente conectado");
+                clientes.add(sc);//Añado el socket a la lista de sockets
+                c = new Cliente(sc);//Creo un Cliente a partir de Socket
+                conexiones.add(c);//Añado el cliente a una lista de clientes
+                Thread t2 = new Thread(c);
+                t2.start();
+                EscucharAlCliente t3 = new EscucharAlCliente(sc,this);
+                t3.start();
+                t3.setS(this);
+                enviarMensaje("m/Hay "+ clientes.size()+"conectados");
+                if(clientes.size()==1){
+                    jugar();
                 }
 
+            } catch (IOException ex) {
+                System.out.println(ex);
+                System.out.println("aca");
             }
+        }
     }
     
-
-    
-    public void enviarMensaje(String h){
+    public void enviarMensaje(String h){//Este es para enviar mensajes en general
         for (Socket sock : clientes) {
             try {
                 if(sock!=null){
@@ -89,12 +82,10 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
                     clientes.set(clientes.indexOf(sock),null); //Si el usuario esta desconectado su Socket se vuelve null
                     System.out.println("Se desconecto el cliente "+sock.getInetAddress());//NO puedo eliminar el elemento
                                                                                           //Por que me da error 
-                
-                
             }
         }
     }
-    public void enviarMensaje(int pos){
+    public void enviarMensaje(int pos){//Este es para enviar mensaje al que le toca dibujar
         for (Socket sock : clientes) {
             try {
                 if(sock!=null){
@@ -114,6 +105,7 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
             }
         }
     }
+    /*
     public void enviarMensaje(){
             for (Socket sock : clientes) {
             try {
@@ -124,42 +116,29 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
                 }
             } catch (IOException ex) {
                     System.out.println("error");
-                    clientes.set(clientes.indexOf(sock),null); //Si el usuario esta desconectado su Socket se vuelve null
+                    clientes.set(clientes.indexOf(sock),null); //Si el usuarsio esta desconectado su Socket se vuelve null
                     System.out.println("Se desconecto el cliente "+sock.getInetAddress());//NO puedo eliminar el elemento por que me da error 
             }
         }
     }
-
-    public synchronized void conexionCerrada(Socket conexion) {
-        clientes.remove(clientes.indexOf(conexion));
+    */
+    public synchronized void conexionCerrada(Socket conexion) {//Esto seria para eliminar el socket inutil si alguna vez puedo hacerlo
+        clientes.remove(clientes.indexOf(conexion));//Por esa razon no o elimino
         System.out.println("Se desconecto el cliente "+conexion.getInetAddress());
     }
-
-    public void Juego(){
-        int n = (int) (Math.random() *clientes.size());        
-        while(yaDibujo.size() < clientes.size()){//Cuando todos hayan dibujado termina el bucle
-            Socket sock = clientes.get(n);
-            if(yaDibujo.contains(sock)){
-                if(clientes.get(clientes.size()-1) == sock){//Si el ultimo cliente es igual al sock empieza de 0
-                    System.out.println("ultimo");
-                    n=0;
-                }else{
-                    n++;
-                }
-            }else{
-                enviarMensaje(n);
-                yaDibujo.add(clientes.get(n));
-                break;
-            }
-        }
-        if(yaDibujo.size()==clientes.size()){
-            System.out.println("JUEGO TERMINADO_________________");
-            enviarMensaje("JuegoTerminado");
-            enviarMensaje();
-        }
+    
+    
+    public void jugar(){
+        juego.Jugar();
     }
+    
+    
+
     public void dibujante(int i){
         enviarMensaje(i);
+    }
+    public Socket getDibujante(){
+        return juego.getDibujante();
     }
 
     public ArrayList<Socket> getClientes() {
@@ -173,18 +152,15 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
     public ArrayList<Cliente> getConexiones() {
         return conexiones;
     }
+    public int getNClientes() {
+        return clientes.size();
+    }
 
     public void setConexiones(ArrayList<Cliente> conexiones) {
         this.conexiones = conexiones;
     }
 
-    public ArrayList<Socket> getYaDibujo() {
-        return yaDibujo;
-    }
 
-    public void setYaDibujo(ArrayList<Socket> yaDibujo) {
-        this.yaDibujo = yaDibujo;
-    }
 
     public int getNumConexiones() {
         return numConexiones;
@@ -209,9 +185,16 @@ public class Servidor extends ConexionServer implements Runnable { //Se hereda d
     public void setDesconecxion(Socket desconecxion) {
         this.desconecxion = desconecxion;
     }
-    
-    
-    
+
+    public Juego getJuego() {
+        return juego;
+    }
+
+    public void setJuego(Juego juego) {
+        this.juego = juego;
+    }
+
+
     
     
     
@@ -229,8 +212,6 @@ class Cliente implements Runnable {
     public Cliente(Socket s) throws IOException {
         socketCliente = s;
         EntradaCliente = new DataInputStream(socketCliente.getInputStream());
-        //EscucharAlCliente t3 = new EscucharAlCliente(EntradaCliente);
-        //t3.start();
     }
 /////////////////////////////////////////////////////////////////////
     public void run() {
@@ -291,7 +272,6 @@ class EscucharAlCliente extends Thread {
     private Socket sock;
     private BufferedReader bf;
     private Servidor s;
-    private String oldMensaje="nada";
     private ArrayList<Socket> yaDibujo;
     
     
@@ -318,33 +298,34 @@ class EscucharAlCliente extends Thread {
         this.s=s;
     }
     
-            int n = 0;
+        int x = 0;
 
     @Override
     public void run(){
-        
+        Juego j = s.getJuego();
         while(true){
-            yaDibujo=s.getYaDibujo();
-            this.n=+1;
-            try {
-                Salida.writeUTF("");
-            } catch (IOException ex) {
-            }
+            yaDibujo=j.getYaDibujo();
             try {
                 String mensaje=EntradaCliente.readUTF();
-                
-                    if(sock==yaDibujo.get(yaDibujo.size()-1)){
+                    if(sock==s.getDibujante()){
                         s.enviarMensaje(mensaje);
                         System.out.println(mensaje);
                     }else{
                         System.out.println("Adivinador"+ mensaje);
-                        s.enviarMensaje(mensaje);
+                        if(j.comparar(mensaje)){
+                            s.enviarMensaje("correcto");
+                            x++;
+                            if(x == s.getNClientes()){
+                                x=0;
+                                s.jugar();
+                            }
+                        }else{
+                            s.enviarMensaje(mensaje);
+                        }
                     }
-                    
                     
             } catch (IOException ex) {
             }
-            
         }
     }
 
@@ -388,14 +369,21 @@ class EscucharAlCliente extends Thread {
         this.s = s;
     }
 
-    public int getN() {
-        return n;
+
+    public ArrayList<Socket> getYaDibujo() {
+        return yaDibujo;
     }
 
-    public void setN(int n) {
-        this.n = n;
+    public void setYaDibujo(ArrayList<Socket> yaDibujo) {
+        this.yaDibujo = yaDibujo;
+    }
+
+    @Override
+    public String toString() {
+        return "EscucharAlCliente{" + "EntradaCliente=" + EntradaCliente + ", Salida=" + Salida + ", sock=" + sock + ", bf=" + bf + ", s=" + s + ", yaDibujo=" + yaDibujo+ '}';
     }
     
+
 }
 
 

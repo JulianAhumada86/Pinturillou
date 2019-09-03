@@ -66,13 +66,5 @@ public class Cliente extends Conexion{
     }
     
 }
-/*
-        JPanel panel_2 = new JPanel();//Panel para el chat
-
-        panel.setPreferredSize(new Dimension(68, 190));
-        panel.setMinimumSize(new Dimension(68, 190));
-        panel.setMaximumSize(new Dimension(68, 190));
-        //content.add(panel_2, BorderLayout.WEST);
-        
-        
-*/
+     
+       

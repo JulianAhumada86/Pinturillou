@@ -21,5 +21,4 @@ public class PinturilloServer {
         Servidor c = new Servidor();//l
         c.run();
     }
-    
 }

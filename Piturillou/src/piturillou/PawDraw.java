@@ -27,7 +27,7 @@ class PadDraw extends JComponent implements Runnable {
     private Graphics2D graphics2D;
     private int currentX, currentY, oldX, oldY;
     private Cliente cliente;
-    private boolean Dibujante=true;
+    private boolean Dibujante=false;
     private boolean real;
     private String msg;
     private chat ch;
@@ -40,9 +40,6 @@ class PadDraw extends JComponent implements Runnable {
             public void mousePressed(MouseEvent e) {
                 oldX = e.getX();
                 oldY = e.getY();
-                //String msg = ""+currentX + "/"+currentY;
-                //cliente.enviarMensaje(msg);
-
             }
         });
 
@@ -76,65 +73,63 @@ class PadDraw extends JComponent implements Runnable {
         g.drawImage(image, 5, 5, null);
     }
 
+
     public void clear() {
-        graphics2D.setPaint(Color.white);
-        graphics2D.fillRect(0, 0, getSize().width, getSize().height);
-        graphics2D.setPaint(Color.black);
-        repaint();
+            graphics2D.setPaint(Color.white);
+            graphics2D.fillRect(0, 0, getSize().width, getSize().height);
+            graphics2D.setPaint(Color.black);
+            repaint();
     }
 
     public void red() {
-        graphics2D.setPaint(Color.red);
-        repaint();
+            graphics2D.setPaint(Color.red);
+            repaint();
     }
 
     public void black() {
-        graphics2D.setPaint(Color.black);
-        repaint();
+            graphics2D.setPaint(Color.black);
+            repaint();
     }
+    
 
     public void yellow() {
-        graphics2D.setPaint(Color.yellow);
-        repaint();
+            graphics2D.setPaint(Color.yellow);
+            repaint();
     }
 
     public void blue() {
-        graphics2D.setPaint(Color.blue);
-        repaint();
+            graphics2D.setPaint(Color.blue);
+            repaint();
     }
 
     public void green() {
-        graphics2D.setPaint(Color.green);
-        repaint();
+            graphics2D.setPaint(Color.green);
+            repaint();
     }
 
     public void small() {
-        graphics2D.setStroke(new BasicStroke(1));;
+            graphics2D.setStroke(new BasicStroke(1));;
     }
 
     public void medium() {
-        graphics2D.setStroke(new BasicStroke(5));;
+            graphics2D.setStroke(new BasicStroke(5));;
     }
 
     public void big() {
-        graphics2D.setStroke(new BasicStroke(12));;
+            graphics2D.setStroke(new BasicStroke(12));;
     }
     
     @Override
     public void run() {
         String Index="decv";
-        if(cliente.getDib()){
             String an = cliente.getMensaje();
             if(an.charAt(0)==Index.charAt(0)){//Indicaria que tiene que dibujar 
                 for(int i=0; i<an.length();i++){}
-            }
         }
     }
         
     public void DibujarLinea(int currentX,int currentY,int oldX, int oldY){
-        if (graphics2D != null) {
              graphics2D.drawLine(oldX, oldY, currentX, currentY);
-        }
         repaint();
     }
     public void enviarMensaje(String mensaje){
@@ -227,7 +222,7 @@ class PadDraw extends JComponent implements Runnable {
 
     public void setMsg(String msg) {
         this.msg = msg;
-        System.out.println(" ACAAAAAA");ch.setMsg(msg);
+        ch.setMsg(msg);
 
     }
 

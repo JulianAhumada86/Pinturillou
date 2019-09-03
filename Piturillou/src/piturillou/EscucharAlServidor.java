@@ -32,7 +32,6 @@ public class EscucharAlServidor extends Thread {
             //System.out.println("ghola");
             try {
                 mensaje = EntradaServidor.readUTF();
-                System.out.println(mensaje);
                 String[] arrayMensaje = mensaje.split("/");//Creo un array por cada barra
                 if (arrayMensaje[0].equals("p")){
                     padDraw.DibujarLinea(Integer.parseInt(arrayMensaje[1]),//oldX
@@ -79,7 +78,6 @@ public class EscucharAlServidor extends Thread {
                 
                 
                 
-                    
             } catch (IOException ex) {
                 System.out.println(ex);
             }
